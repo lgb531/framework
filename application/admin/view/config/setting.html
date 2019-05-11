@@ -1,0 +1,195 @@
+{extend name="main"}
+{block name="style"}
+<style>
+    .input-group-addon{top:0;right:1px;color:#eee;width:25px;padding:5.5px;position:absolute;margin-top:1px;text-align:center;background-color: #FBFBFB;border-left: 1px solid #e6e6e6}
+</style>
+{/block}
+{block name="content"}
+<form onsubmit="return false;" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="layui-card-body">
+        {foreach $list as $vo} {switch name="vo.input_type"}{case value="0"}
+        <!-- 文本框 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$vo.name|parse_name=1}<br><span
+                    class="nowrap color-desc">{$vo.title}</span></label>
+            <div class="layui-input-block">
+                <input type="text" name="{$vo.name}" {$vo.is_required?'required':''} placeholder="请输入{$vo.title}"
+                value="{$vo.value|default=''}" class="layui-input">
+                <p class="help-block">{$vo.remark|raw}</p>
+            </div>
+        </div>
+        {/case}
+        {case value="1"}
+        <!-- 密码框 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$vo.name|parse_name=1}<br><span
+                    class="nowrap color-desc">{$vo.title}</span></label>
+            <div class="layui-input-block">
+                <input type="password" name="{$vo.name}" {$vo.is_required?'required':''} placeholder="请输入{$vo.title}"
+                value="{$vo.value|default=''}" class="layui-input">
+                <p class="help-block">{$vo.remark|raw}</p>
+            </div>
+        </div>
+        {/case} {case value="2"}
+        <!-- 选择框 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$vo.name|parse_name=1}<br><span
+                    class="nowrap color-desc">{$vo.title}</span></label>
+            <div class="layui-input-block">
+                <select name='{$vo.name}' class='layui-select full-width'>
+                    <option value=''> - 请选择 -</option>
+                    <!-- {volist name="$vo.name|dict_list" id="vv"} -->
+                    <!-- {eq name='vv.value' value='$vo.value|default=0'} -->
+                    <option selected value='{$vv.value}'>{$vv.name}</option>
+                    <!-- {else} -->
+                    <option value='{$vv.value}'>{$vv.name}</option>
+                    <!-- {/eq} -->
+                    <!-- {/volist} -->
+                </select>
+                <p class="help-block">{$vo.remark|raw}</p>
+            </div>
+        </div>
+        {/case} {case value="3"}
+        <!-- 复选框 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$vo.name|parse_name=1}<br><span
+                    class="nowrap color-desc">{$vo.title}</span></label>
+            <div class="layui-input-block">
+                <!-- {volist name="$vo.name|dict_list" id="vv"} -->
+                <!--{if in_array($vv['value'],explode(',', $vo['value']))}-->
+                <input type="checkbox" checked name="{$vo.name}[]" value="{$vv.value}" title="{$vv.name}">
+                <!-- {else} -->
+                <input type="checkbox" name="{$vo.name}[]" value="{$vv.value}" title="{$vv.name}">
+                <!--{/if}-->
+                <!-- {/volist} -->
+                <p class="help-block">{$vo.remark|raw}</p>
+            </div>
+        </div>
+        {/case} {case value="4"}
+        <!-- 开关 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$vo.name|parse_name=1}<br><span
+                    class="nowrap color-desc">{$vo.title}</span></label>
+            <div class="layui-input-block">
+                <input type="checkbox" lay-skin="switch" lay-text="开|关" value="{$vo.value|default=0}" {$vo.value?'checked':''}
+                lay-filter="switchTab">
+                <p class="help-block">{$vo.remark|raw}</p>
+                <input name="{$vo.name}" value="{$vo.value|default='0'}" type="hidden">
+            </div>
+        </div>
+        <script>
+            layui.use(['form'], function () {
+                var form = layui.form;
+                //监听指定开关
+                form.on('switch(switchTab)', function (data) {
+                    $(this).val(this.checked ? '1' : '0')
+                    $(this).parent().find('input[type=hidden]').val(this.checked ? '1' : '0')
+                });
+            });
+        </script>
+        {/case} {case value="5"}
+        <!-- 单选框 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$vo.name|parse_name=1}<br><span
+                    class="nowrap color-desc">{$vo.title}</span></label>
+            <div class="layui-input-block">
+                {foreach ['1'=>'开启','0'=>'关闭'] as $k=>$v}
+                <label class="think-radio">
+                    <!--{if $vo.value eq $k}-->
+                    <input checked type="radio" name="{$vo.name}" value="{$k}" title="{$v}" lay-ignore> {$v}
+                    <!--{else}-->
+                    <input type="radio" name="{$vo.name}" value="{$k}" title="{$v}" lay-ignore> {$v}
+                    <!--{/if}-->
+                </label>
+                {/foreach}
+                <p class="help-block">{$vo.remark|raw}</p>
+            </div>
+        </div>
+        {/case} {case value="6"}
+        <!-- 文本域 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$vo.name|parse_name=1}<br><span
+                    class="nowrap color-desc">{$vo.title}</span></label>
+            <div class="layui-input-block">
+                <textarea name="{$vo.name}" placeholder="请输入{$vo.title}" class="layui-textarea">{$vo.value|default=''|raw}</textarea>
+                <p class="help-block">{$vo.remark|raw}</p>
+            </div>
+        </div>
+        {/case} {case value="7"}
+        <!-- 图文编辑器 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$vo.name|parse_name=1}<br><span class="nowrap color-desc">{$vo.title}</span></label>
+            <div class="layui-input-block">
+                <textarea name="{$vo.name}" title="content">{$vo.value|default=''|raw}</textarea>
+                <p class="help-block">{$vo.remark|raw}</p>
+            </div>
+        </div>
+        <script>
+            $(function () {
+                // 编辑器提交
+                require(['ckeditor'], function () {
+                    /*! 实例富文本编辑器  */
+                    var editor;
+                    /*! 默认编辑图文 */
+                    editor = window.createEditor('[name="{$vo.name}"]');
+                });
+            });
+        </script>
+        {/case} {case value="8"}
+        <!-- 图片上传 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$vo.name|parse_name=1}<br><span class="nowrap color-desc">{$vo.title}</span></label>
+            <div class='layui-input-block'>
+                <input type="hidden" name="{$vo.name}" value="{$vo.value|default=''}">
+                <p class="help-block">{$vo.remark|raw}</p>
+            </div>
+            <script>
+                $(function () {
+                    $('input[name="{$vo.name}"]').uploadOneImage();
+                });
+            </script>
+        </div>
+        {/case} {case value="9"}
+        <!-- 文件上传 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$vo.name|parse_name=1}<br><span class="nowrap color-desc">{$vo.title}</span></label>
+            <div class="layui-input-block">
+                <div class="input-group">
+                    <input class='layui-input' type="text" value="{$vo.value|default=''}" name="{$vo.name}">
+                    <a data-file="btn" data-type="{:sysconf('storage_local_exts')}" data-field="{$vo.name}" class="input-group-addon">
+                        <i class="layui-icon layui-icon-upload"></i>
+                    </a>
+                    <p class="help-block">{$vo.remark|raw}</p>
+                </div>
+            </div>
+        </div>
+        {/case} {case value="10"}
+        <!-- 多图上传 -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$vo.name|parse_name=1}<br><span
+                    class="nowrap color-desc">{$vo.title}</span></label>
+            <div class="layui-input-block">
+                <input type="hidden" name="{$vo.name}" value="{$vo.value|default=''}">
+                <p class="help-block">{$vo.remark|raw}</p>
+            </div>
+            <script>
+                $(function () {
+                    $('input[name="{$vo.name}"]').uploadMultipleImage();
+                });
+            </script>
+        </div>
+        {/case}
+        {/switch} {/foreach}
+
+        <div class="hr-line-dashed margin-left-40"></div>
+        <div class="layui-form-item text-center">
+            <div class="layui-row">
+                <div class="layui-col-sm8 layui-col-md6">
+                    <button class="layui-btn" type="submit">保存配置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>form.render()</script>
+{/block}

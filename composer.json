@@ -15,6 +15,8 @@
     "ext-iconv": "*",
     "ext-openssl": "*",
     "ext-mbstring": "*",
+    "ext-pdo": "*",
+    "ext-fileinfo": "*",
     "endroid/qr-code": "^1.9",
     "topthink/framework": "5.1.*",
     "zoujingli/ip2region": "^1.0",

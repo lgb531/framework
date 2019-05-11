@@ -1,0 +1,79 @@
+<form class="layui-form layui-card" action="{:request()->url()}" data-auto="true" method="post" autocomplete="off">
+    <div class="layui-card-body">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">数据类型</label>
+            <div class="layui-input-block">
+                <select name='input_type' class='layui-select'>
+                    <!--{foreach $types as $type}-->
+                    <!--{eq name='type.value' value='$vo.input_type|default=0'}-->
+                    <option selected value='{$type.value}'>{$type.name}</option>
+                    <!--{else}-->
+                    <option value='{$type.value}'>{$type.name}</option>
+                    <!--{/eq}-->
+                    <!--{/foreach}-->
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">配置类型</label>
+            <div class="layui-input-block">
+                <select name='group_id' class='layui-select'>
+                    <!--{foreach $groups as $group}-->
+                    <!--{eq name='group.value' value='$vo.group_id|default=0'}-->
+                    <option selected value='{$group.value}'>{$group.name}</option>
+                    <!--{else}-->
+                    <option value='{$group.value}'>{$group.name}</option>
+                    <!--{/eq}-->
+                    <!--{/foreach}-->
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">配置名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" value='{$vo.title|default=""}' required placeholder="请输入权限名称" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">配置参数</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" value='{$vo.name|default=""}' required placeholder="请输入参数名称" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">参数说明</label>
+            <div class="layui-input-block">
+                <input type="text" name="remark" value='{$vo.remark|default=""}' placeholder="请输入参数说明" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序值</label>
+            <div class="layui-input-block">
+                <input type="number" name="sort" value='{$vo.sort|default=0}' placeholder="请输入排序值" class="layui-input">
+                <p class="help-block">排序值越大越靠前</p>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否必填</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="is_required" lay-skin="switch" lay-text="是|否" value="{$vo.is_required|default=0}" {$vo.is_required?'checked':''} class="layui-input">
+                <p class="help-block">排序值越大越靠前</p>
+            </div>
+        </div>
+
+    </div>
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+<script>form.render()</script>

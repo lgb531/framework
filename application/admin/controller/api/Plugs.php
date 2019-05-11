@@ -137,14 +137,19 @@ class Plugs extends Controller
         if (!$file->checkExt(strtolower(sysconf('storage_local_exts')))) {
             return json(['uploaded' => false, 'error' => ['message' => '文件上传类型受限，请在后台配置']]);
         }
-        if ($file->checkExt('php')) {
-            return json(['uploaded' => false, 'error' => ['message' => '可执行文件禁止上传到本地服务器']]);
-        }
         $this->safe = $this->getUploadSafe();
         $this->uptype = $this->getUploadType();
         $this->ext = pathinfo($file->getInfo('name'), PATHINFO_EXTENSION);
+        if ($this->ext == 'php') {
+            return json(['uploaded' => false, 'error' => ['message' => '可执行文件禁止上传到本地服务器']]);
+        }
         $name = File::name($file->getPathname(), $this->ext, '', 'md5_file');
-        $info = File::instance($this->uptype)->save($name, file_get_contents($file->getRealPath()), $this->safe);
+        if (!$file->getRealPath()) {
+            $realPath = $file->getInfo('tmp_name');
+        } else {
+            $realPath = $file->getRealPath();
+        }
+        $info = File::instance($this->uptype)->save($name, file_get_contents($realPath), $this->safe);
         if (is_array($info) && isset($info['url'])) {
             return json(['uploaded' => true, 'filename' => $name, 'url' => $this->safe ? $name : $info['url']]);
         }

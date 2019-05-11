@@ -1,0 +1,33 @@
+<form class="layui-form layui-card" action="{:request()->url()}" data-auto="true" method="post" autocomplete="off">
+    <div class="layui-card-body">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">字典类型</label>
+            <div class="layui-input-block">
+                <input type="text" name="type" value='{$vo.type|default=""}' required placeholder="请输入字典类型" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">参数名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" value='{$vo.name|default=""}' required placeholder="请输入参数名称" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">参数值</label>
+            <div class="layui-input-block">
+                <input type="text" name="value" value='{$vo.value|default=""}' required placeholder="请输入参数值" class="layui-input">
+            </div>
+        </div>
+
+    </div>
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+<script>form.render()</script>

@@ -1,0 +1,55 @@
+{extend name='main'}
+
+{block name="button"}
+<!--{if auth("admin/dict/add")}-->
+<button data-modal='{:url("add")}' data-title="新增字典" class='layui-btn layui-btn-sm layui-btn-primary'>新增字典</button>
+<!--{/if}-->
+<!--{if auth("admin/dict/del")}-->
+<button data-action='{:url("del")}' data-rule="id#{key}" data-confirm="确定要删除这些字典吗？" class='layui-btn layui-btn-sm layui-btn-primary'>删除字典</button>
+<!--{/if}-->
+{/block}
+
+{block name="content"}
+<table class="layui-table" lay-skin="line">
+    <caption class="margin-bottom-10 text-left">{include file='dict/index_search'}</caption>
+    {notempty name='list'}
+    <thead>
+    <tr>
+        <th class='list-table-check-td think-checkbox'>
+            <input data-auto-none data-check-target='.list-check-box' type='checkbox'>
+        </th>
+        <th class='text-left nowrap'>字典类型</th>
+        <th class='text-left nowrap'>参数名称</th>
+        <th class='text-left nowrap'>参数</th>
+        <th class='text-left nowrap'>创建时间</th>
+        <th class='text-left nowrap'></th>
+    </tr>
+    </thead>
+    {/notempty}
+    <tbody>
+    {foreach $list as $key=>$vo}
+    <tr>
+        <td class='list-table-check-td think-checkbox'><input class="list-check-box" value='{$vo.id}' type='checkbox'></td>
+        <td class='text-left nowrap'>{$vo.type}</td>
+        <td class='text-left nowrap'>{$vo.name}</td>
+        <td class='text-left nowrap'>{$vo.value}</td>
+        <td class='text-left nowrap'>日期：{$vo.create_at|format_datetime|str_replace=' ','<br>时间：',###|raw}</td>
+        <td class='text-left nowrap'>
+
+            {if auth("admin/dict/edit")}
+            <a data-dbclick data-title="修改配置" class="layui-btn layui-btn-sm" data-modal='{:url("edit")}?id={$vo.id}'>编 辑</a>
+            {/if}
+
+            {if auth("admin/dict/del")}
+            <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要删除该配置吗？" data-action="{:url('del')}" data-value="id#{$vo.id}">删 除</a>
+            {/if}
+
+        </td>
+    </tr>
+    {/foreach}
+    </tbody>
+</table>
+
+{empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+
+{/block}

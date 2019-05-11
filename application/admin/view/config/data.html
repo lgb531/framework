@@ -1,0 +1,43 @@
+{extend name='main'}
+
+
+{block name="content"}
+<table class="layui-table" lay-skin="line">
+    {notempty name='list'}
+    <thead>
+    <tr>
+        <th class='list-table-check-td think-checkbox'>
+            <input data-auto-none data-check-target='.list-check-box' type='checkbox'>
+        </th>
+        <th class='text-left nowrap'>表名</th>
+        <th class='text-left nowrap'>表用途</th>
+        <th class='text-left nowrap'>数据量</th>
+        <th class='text-left nowrap'>引擎类型</th>
+        <th class='text-left nowrap'>字符集</th>
+        <th class='text-left nowrap'>表大小</th>
+    </tr>
+    </thead>
+    {/notempty}
+    <tbody>
+    {foreach $list as $key=>$vo}
+    <tr>
+        <td class='list-table-check-td think-checkbox'><input class="list-check-box" value='' type='checkbox'></td>
+        <td class='text-left nowrap'>{$vo.Name}</td>
+        <td class='text-left nowrap'>{$vo.Comment}</td>
+        <td class='text-left nowrap'>{$vo.Rows}</td>
+        <td class='text-left nowrap'>{$vo.Engine}</td>
+        <td class='text-left nowrap'>{$vo.Collation}</td>
+        <td class='text-left nowrap'>{$vo.size}</td>
+    </tr>
+    {/foreach}
+    </tbody>
+    <thead>
+    <tr>
+        <th class='text-center' colspan="7">数据库中共有 {$tables} 张表，共计 {$total}</th>
+    </tr>
+    </thead>
+</table>
+
+{empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+
+{/block}

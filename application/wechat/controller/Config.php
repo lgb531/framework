@@ -71,7 +71,7 @@ class Config extends Controller
     public function payment()
     {
         $this->applyCsrfToken();
-        $this->title = '公众号支付配置';
+        $this->title = '微信支付配置';
         if ($this->request->isGet()) {
             $file = File::instance('local');
             $this->wechat_mch_ssl_cer = sysconf('wechat_mch_ssl_cer');

@@ -31,7 +31,7 @@
         </ul>
     </form>
     <div class="footer notselect">
-        {:sysconf('site_copy')}
+        {if sysconf('site_copy')}Copyright ® {:sysconf('site_copy')}-{:date('Y')}  {:sysconf('site_name')}  版权所有{/if}
         {if sysconf('miitbeian')}<span>&nbsp;|&nbsp;</span><a target="_blank" href="http://www.miitbeian.gov.cn">{:sysconf('miitbeian')}</a>{/if}
     </div>
 </div>

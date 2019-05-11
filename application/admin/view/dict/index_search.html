@@ -1,0 +1,44 @@
+<fieldset>
+
+    <legend class="layui-bg-cyan">条件搜索</legend>
+
+    <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get" autocomplete="off">
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">参数名称</label>
+            <div class="layui-input-inline">
+                <input name="name" value="{$Think.get.name|default=''}" placeholder="请输入参数名称" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">字典类型</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="type">
+                    <option value="">-- 全部类型 --</option>
+                    {foreach $actions as $action}
+                    {eq name='Think.get.type' value='action'}
+                    <option selected value="{$action}">{$action}</option>
+                    {else}
+                    <option value="{$action}">{$action}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">创建时间</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="create_at" value="{$Think.get.create_at|default=''}" placeholder="请选择创建时间" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+        </div>
+    </form>
+
+</fieldset>
+
+<script>form.render()</script>
