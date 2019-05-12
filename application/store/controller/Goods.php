@@ -33,7 +33,6 @@ class Goods extends Controller
 
     /**
      * 商品信息管理
-     * @return mixed
      * @throws \think\Exception
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
@@ -66,7 +65,7 @@ class Goods extends Controller
 
     /**
      * 商品库存入库
-     * @return mixed
+     * @return bool|void
      * @throws \think\Exception
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
@@ -82,20 +81,23 @@ class Goods extends Controller
             $goods['list'] = Db::name('StoreGoodsList')->where(['goods_id' => $GoodsId])->select();
             return $this->fetch('', ['vo' => $goods]);
         }
-        list($post, $data) = [$this->request->post(), []];
-        if (isset($post['id']) && isset($post['goods_id']) && is_array($post['goods_id'])) {
-            foreach (array_keys($post['goods_id']) as $key) if ($post['goods_number'][$key] > 0) array_push($data, [
-                'goods_id'     => $post['goods_id'][$key],
-                'goods_spec'   => $post['goods_spec'][$key],
-                'number_stock' => $post['goods_number'][$key],
-            ]);
-            if (!empty($data)) {
-                Db::name('StoreGoodsStock')->insertAll($data);
-                \app\store\service\Goods::syncStock($post['id']);
-                $this->success('商品信息入库成功！');
+        if ($this->request->isPost()) {
+            list($post, $data) = [$this->request->post(), []];
+            if (isset($post['id']) && isset($post['goods_id']) && is_array($post['goods_id'])) {
+                foreach (array_keys($post['goods_id']) as $key) if ($post['goods_number'][$key] > 0) array_push($data, [
+                    'goods_id' => $post['goods_id'][$key],
+                    'goods_spec' => $post['goods_spec'][$key],
+                    'number_stock' => $post['goods_number'][$key],
+                ]);
+                if (!empty($data)) {
+                    Db::name('StoreGoodsStock')->insertAll($data);
+                    \app\store\service\Goods::syncStock($post['id']);
+                    $this->success('商品信息入库成功！');
+                }
             }
+            $this->error('没有需要商品入库的数据！');
         }
-        $this->error('没有需要商品入库的数据！');
+        return false;
     }
 
     /**
@@ -141,13 +143,13 @@ class Goods extends Controller
         } elseif ($this->request->isPost()) {
             Db::name('StoreGoodsList')->where(['goods_id' => $data['id']])->update(['status' => '0']);
             foreach (json_decode($data['lists'], true) as $vo) Data::save('StoreGoodsList', [
-                'goods_id'       => $data['id'],
-                'goods_spec'     => $vo[0]['key'],
-                'price_market'   => $vo[0]['market'],
-                'price_selling'  => $vo[0]['selling'],
+                'goods_id' => $data['id'],
+                'goods_spec' => $vo[0]['key'],
+                'price_market' => $vo[0]['market'],
+                'price_selling' => $vo[0]['selling'],
                 'number_virtual' => $vo[0]['virtual'],
                 'number_express' => $vo[0]['express'],
-                'status'         => $vo[0]['status'] ? 1 : 0,
+                'status' => $vo[0]['status'] ? 1 : 0,
             ], 'goods_spec', ['goods_id' => $data['id']]);
         }
     }

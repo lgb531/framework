@@ -81,9 +81,9 @@
             layui.use(['form'], function () {
                 var form = layui.form;
                 //监听指定开关
-                form.on('switch(switchTab)', function (data) {
-                    $(this).val(this.checked ? '1' : '0')
-                    $(this).parent().find('input[type=hidden]').val(this.checked ? '1' : '0')
+                form.on('switch(switchTab)', function () {
+                    $(this).val(this.checked ? '1' : '0');
+                    $(this).parent().find('input[type=hidden]').val(this.checked ? '1' : '0');
                 });
             });
         </script>

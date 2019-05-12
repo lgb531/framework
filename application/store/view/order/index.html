@@ -39,11 +39,11 @@
             {eq name='vo.status' value='4'}<span class="layui-badge layui-bg-green margin-left-5">已发货</span>{/eq}
             {eq name='vo.status' value='5'}<span class="layui-badge layui-bg-blue margin-left-5">已完成</span>{/eq}
             <br>
-            订单金额：<strong class="color-blue">{$vo.price_total+0}</strong> 元
-            分成 <strong class="color-blue">{$vo.price_rate_amount+0}</strong> 元
-            已支付 <strong class="color-blue">{$vo.pay_price+0}</strong> 元<br>
+            订单金额：<strong class="color-blue">{$vo.price_total|default=0}</strong> 元
+            分成 <strong class="color-blue">{$vo.price_rate_amount|default=0}</strong> 元
+            已支付 <strong class="color-blue">{$vo.pay_price|default=0}</strong> 元<br>
             下单时间：{$vo.create_at|format_datetime}<br>
-            支付时间：{$vo.pay_at|format_datetime|default='--'}<br>
+            支付时间：{$vo.pay_at|default='--'|format_datetime}<br>
         </td>
         <td class="text-left nowrap">
             收货信息：{$vo.express_name|default='--'}<span class="margin-left-5 color-blue">{$vo.express_phone}</span><br>

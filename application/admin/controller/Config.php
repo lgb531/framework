@@ -133,7 +133,7 @@ class Config extends Controller
         $this->applyCsrfToken();
         if ($this->request->isGet()) {
             $this->title = Db::name('SystemDict')->where(['type' => 'conf_group', 'value' => $this->request->get('group_id')])->value('name');
-            $this->list = $this->_query($this->table)->equal('group_id')->order('sort asc,id asc')->page();
+            $this->list = $this->_query($this->table)->equal('group_id')->order('sort asc,id asc')->page(false);
             $this->fetch();
         } else {
             foreach ($this->request->post() as $k => $v) {

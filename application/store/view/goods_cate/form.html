@@ -3,10 +3,18 @@
     <div class="layui-card-body">
 
         <div class="layui-form-item">
-            <label class="layui-form-label">商品分类图片</label>
+            <label class="layui-form-label">上级菜单</label>
             <div class="layui-input-block">
-                <input name="logo" required value='{$vo.logo|default=""}' placeholder="请上传分类图片" class="layui-input">
-                <button data-file="btn" data-field="logo" data-type="png,jpg,gif" class="layui-btn layui-btn-sm" type="button">上传图片</button>
+                <select name='pid' class='layui-select full-width' lay-ignore>
+                    <!--{foreach $menus as $menu}-->
+                    <!--{eq name='menu.id' value='$vo.pid|default=0'}-->
+                    <option selected value='{$menu.id}'>{$menu.spl|raw}{$menu.title}</option>
+                    <!--{else}-->
+                    <option value='{$menu.id}'>{$menu.spl|raw}{$menu.title}</option>
+                    <!--{/eq}-->
+                    <!--{/foreach}-->
+                </select>
+                <p class="help-block"><b>必选</b>，请选择上级菜单或顶级菜单（目前最多支持三级菜单）</p>
             </div>
         </div>
 
@@ -18,9 +26,26 @@
         </div>
 
         <div class="layui-form-item">
+            <label class="layui-form-label">商品分类图片</label>
+            <div class="layui-input-block">
+                <input type="hidden" name="logo" value="{$vo.logo|default=''}">
+                <p class="help-block"><b>注意：</b>分类图片用于子分类</p>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
             <label class="layui-form-label">商品分类描述</label>
             <div class="layui-input-block">
                 <textarea class="layui-textarea" name="desc">{$vo.desc|default=''}</textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否推荐</label>
+            <div class="layui-input-block">
+                <input type="checkbox" lay-skin="switch" lay-text="是|否" value="{$vo.is_recommend|default=0}" {$vo.is_recommend?'checked':''} lay-filter="switchTab">
+                <input name="is_recommend" value="{$vo.is_recommend|default='0'}" type="hidden">
+                <p class="help-block"><b>注意：</b>推荐状态用于子分类</p>
             </div>
         </div>
 
@@ -32,4 +57,16 @@
         <button class="layui-btn" type='submit'>保存数据</button>
         <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
     </div>
+    <script>
+        $(function () {
+            $('input[name="logo"]').uploadOneImage();
+            //监听指定开关
+            form.on('switch(switchTab)', function () {
+                $(this).val(this.checked ? '1' : '0');
+                $(this).parent().find('input[type=hidden]').val(this.checked ? '1' : '0');
+            });
+            form.render();
+        });
+    </script>
+
 </form>

@@ -1,7 +1,5 @@
 <?php
 
-use think\Db;
-
 if (!function_exists('eval_conf')) {
     /**
      * 替换变量输出
@@ -34,7 +32,7 @@ if (!function_exists('dict_arr')) {
      */
     function dict_arr($type = '')
     {
-        $list = Db::name('SystemDict')->where('type', $type)->column('name', 'value');
+        $list = db('SystemDict')->where('type', $type)->column('name', 'value');
 
         return $list;
     }
@@ -51,7 +49,7 @@ if (!function_exists('dict_list')) {
      */
     function dict_list($type = '')
     {
-        $list = Db::name('SystemDict')->where('type', $type)->field('name,value')->select();
+        $list =  db('SystemDict')->where('type', $type)->field('name,value')->select();
 
         return $list;
     }
